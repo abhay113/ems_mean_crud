@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD App API Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container mt-3">
+    <h1 class="display-4 text-center">CRUD Application API</h1>
+    <hr class="mb-4">
+
+    <h2>API Endpoints (using JSON data format):</h2>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Method</th>
+          <th scope="col">URL</th>
+          <th scope="col">Description</th>
+           </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>POST</td>
+          <td>/users</td>
+          <td>Create a new user</td>
+         <tr>
+          <td>GET</td>
+          <td>/users</td>
+          <td>Get all users</td>
+           </tr>
+        <tr>
+          <td>GET</td>
+          <td>/users/:id</td>
+          <td>Get a user by ID</td>
+          </tr>
+        <tr>
+          <td>PATCH</td>
+          <td>/users/:id</td>
+          <td>Update a user</td>
+           <tr>
+          <td>DELETE</td>
+          <td>/users/:id</td>
+          <td>Delete a user</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-OgwbZS7/BXzYhFQrAuU1EXbsJp0zM8yl/LcjQ5zONvYvAAVV+qAYiIhOdjKIk" crossorigin="anonymous"></script>
+</body>
+</html>

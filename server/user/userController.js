@@ -1,43 +1,67 @@
 const userService = require("./userService");
 
 const getAllUsers = async (req, res) => {
-  const userData = await userService.getAllUsersFromDB();
-  //   console.log(userData)
-  res.send({ status: true, data: userData });
+  try {
+    const userData = await userService.getAllUsersFromDB();
+    res.status(200).json({ status: true, data: userData });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: false, message: "Error fetching users" });
+  }
+};
+
+const getUserById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await userService.getUserById(userId);
+    if (!user) {
+      return res.status(404).json({ status: false, message: "User not found" });
+    }
+    res.status(200).json({ status: true, data: user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: false, message: "Error fetching user" });
+  }
 };
 
 const createUser = async (req, res) => {
-  const userDetails = req.body;
-  const newUser = await userService.createNewUser(userDetails);
-  res.send({ status: true, data: newUser });
-  // console.log(newUser);
+  try {
+    const userDetails = req.body;
+    const newUser = await userService.createNewUser(userDetails);
+    res.status(201).json({ status: true, data: newUser });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ status: false, message: "Error creating user" }); // 400 for bad request (invalid data)
+  }
 };
 
 const updateUser = async (req, res) => {
-  const userId = req.params.id;
-  //   console.log(userId);
-  const userDetails = req.body;
-  //   console.log(userDetails);
-  const updatedUser = await userService.updateUserById(userId, userDetails);
-  //   console.log(updatedUser);
-
-  if (updatedUser) {
-    res.send({ status: true, data: updatedUser });
-  } else {
-    res.send({ status: false, message: "something went wrong " });
+  try {
+    const userId = req.params.id;
+    const userDetails = req.body;
+    const updatedUser = await userService.updateUserById(userId, userDetails);
+    if (!updatedUser) {
+      return res.status(404).json({ status: false, message: "User not found" });
+    }
+    res.status(200).json({ status: true, data: updatedUser });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: false, message: "Error updating user" });
   }
 };
 
 const deleteUser = async (req, res) => {
-  const userId = req.params.id;
-  //   console.log(userId);
-  const deletedUser = await userService.deleteUserById(userId);
-  //   console.log(deletedUser);
-  if (deletedUser) {
-    res.send({ status: true, data: deletedUser });
-  } else {
-    res.send({ status: false, message: "something went wrong " });
+  try {
+    const userId = req.params.id;
+    const deletedUser = await userService.deleteUserById(userId);
+    if (!deletedUser) {
+      return res.status(404).json({ status: false, message: "User not found" });
+    }
+    res.status(200).json({ status: true, message: "User deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: false, message: "Error deleting user" });
   }
 };
 
-module.exports = { getAllUsers, createUser, deleteUser, updateUser };
+module.exports = { getAllUsers, createUser, deleteUser, updateUser, getUserById };
