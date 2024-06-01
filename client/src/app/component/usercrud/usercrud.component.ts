@@ -1,25 +1,25 @@
-import { HttpClient } from '@angular/common/http';
+// src/app/usercrud/usercrud.component.ts
 import { Component } from '@angular/core';
+import { UserService } from '../../user.service';
 
 @Component({
   selector: 'app-usercrud',
   templateUrl: './usercrud.component.html',
-  styleUrl: './usercrud.component.css',
+  styleUrls: ['./usercrud.component.css'],
 })
 export class UsercrudComponent {
-  apiUri: string = 'http://localhost:3000/api';
-
   UserArray: any[] = [];
   currentUserID = '';
   name: string = '';
   address: string = '';
   phone: string = '';
 
-  constructor(private http: HttpClient) {
-    this.getAllUser();
+  constructor(private userService: UserService) {
+    this.getAllUsers();
   }
-  getAllUser() {
-    this.http.get(`${this.apiUri}/getAll`).subscribe((resultData: any) => {
+
+  getAllUsers() {
+    this.userService.getAllUsers().subscribe((resultData: any) => {
       console.log(resultData);
       this.UserArray = resultData.data;
     });
@@ -29,41 +29,36 @@ export class UsercrudComponent {
     this.name = data.name;
     this.address = data.address;
     this.phone = data.phone;
-
     this.currentUserID = data._id;
   }
 
-  UpdateRecords() {
+  updateRecords() {
     let bodyData = {
       name: this.name,
       address: this.address,
       phone: this.phone,
     };
 
-    this.http
-      .patch(`${this.apiUri}/update/` + this.currentUserID, bodyData)
-      .subscribe((resultData: any) => {
-        console.log(resultData);
-        alert('User Updateddd');
-        this.getAllUser();
-      });
+    this.userService.updateUser(this.currentUserID, bodyData).subscribe((resultData: any) => {
+      console.log(resultData);
+      alert('User Updated');
+      this.getAllUsers();
+    });
   }
 
   setDelete(data: any) {
-    this.http
-      .delete(`${this.apiUri}/delete/` + data._id)
-      .subscribe((resultData: any) => {
-        console.log(resultData);
-        alert('User Deletedddd');
-        this.getAllUser();
-      });
+    this.userService.deleteUser(data._id).subscribe((resultData: any) => {
+      console.log(resultData);
+      alert('User Deleted');
+      this.getAllUsers();
+    });
   }
 
   save() {
-    if (this.currentUserID == '') {
+    if (this.currentUserID === '') {
       this.register();
     } else {
-      this.UpdateRecords();
+      this.updateRecords();
     }
   }
 
@@ -73,16 +68,13 @@ export class UsercrudComponent {
       address: this.address,
       phone: this.phone,
     };
-    this.http
-      .post(`${this.apiUri}/create`, bodyData)
-      .subscribe((resultData: any) => {
-        console.log(resultData);
-        alert('User Registered Successfully');
-        //this.getAllEmployee();
-        this.name = '';
-        this.address = '';
-        this.phone = '';
-        this.getAllUser();
-      });
+    this.userService.createUser(bodyData).subscribe((resultData: any) => {
+      console.log(resultData);
+      alert('User Registered Successfully');
+      this.name = '';
+      this.address = '';
+      this.phone = '';
+      this.getAllUsers();
+    });
   }
 }
